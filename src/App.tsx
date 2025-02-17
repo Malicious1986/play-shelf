@@ -4,10 +4,13 @@ import Header from "@/components/header";
 import { Route, Routes } from "react-router-dom";
 import Home from "@/components/home";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ApolloProvider } from "@apollo/client";
+import client from "./apolloClient"; // Import Apollo Client
 
 function App() {
   return (
     <>
+    <ApolloProvider client={client}>
       <ThemeProvider storageKey="vite-ui-theme">
         <Header />
 
@@ -21,6 +24,7 @@ function App() {
 
         <footer></footer>
       </ThemeProvider>
+    </ApolloProvider>
     </>
   );
 }

@@ -1,4 +1,5 @@
 import { Game } from "@/models/game";
+import { useMutation } from "@apollo/client";
 import {
   Card,
   CardContent,
@@ -8,10 +9,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import GameRateItem from "./gameRateItem";
-import { deleteGameAsync, updateGameRate } from "@/store/slices/gameSlice";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/store";
 import { Button } from "./ui/button";
+import { DELETE_GAME, UPDATE_GAME_RATE } from "@/graphql/mutations";
+import { GET_GAMES } from "@/graphql/queris";
 
 export default function GameCard({
   name,
@@ -20,12 +20,17 @@ export default function GameCard({
   rating,
   id,
 }: Game) {
-  const dispatch = useDispatch<AppDispatch>();
+  const [updateRate] = useMutation(UPDATE_GAME_RATE, {
+    refetchQueries: [{ query: GET_GAMES }],
+  });
+  const [deleteGame] = useMutation(DELETE_GAME, {
+    refetchQueries: [{ query: GET_GAMES }],
+  });
   const setRateValue = async (rating: number) => {
-    await dispatch(updateGameRate({ id, rating }));
+    await updateRate({ variables: { id, rating } });
   };
   const handleRemove = async () => {
-    dispatch(deleteGameAsync(id));
+    await deleteGame({ variables: { id } });
   };
   return (
     <Card className="flex flex-col">

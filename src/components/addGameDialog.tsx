@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { nanoid } from "nanoid";
+import { useMutation } from "@apollo/client";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -30,13 +30,14 @@ import {
 } from "./ui/select";
 import { boardGameCategories, Game } from "@/models/game";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/store";
-import { addGameAsync } from "@/store/slices/gameSlice";
+import { ADD_GAME } from "@/graphql/mutations";
+import { GET_GAMES } from "@/graphql/queris";
 
 export function AddGameDialog() {
   const [open, setOpen] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
+  const [addGame] = useMutation(ADD_GAME, {
+    refetchQueries: [{ query: GET_GAMES }], // Refresh game list after adding
+  });
   const formSchema = z.object({
     name: z.string().min(2).max(50),
     description: z.string().max(500).optional(),
@@ -54,16 +55,16 @@ export function AddGameDialog() {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const newGame: Game = {
-      id: nanoid(),
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    const newGame: Omit<Game, 'id'> = {
       name: values.name,
       description: values.description ?? "",
       image: values.image ?? "",
       category: values.category ?? "",
       rating: 0,
     };
-    await dispatch(addGameAsync(newGame));
+
+    addGame({ variables: newGame });
     form.reset();
     setOpen(false);
   };

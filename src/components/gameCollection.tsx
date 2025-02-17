@@ -1,17 +1,11 @@
 import GameGrid from "@/components/grid";
-import { fetchGames } from "@/store/slices/gameSlice";
-import { AppDispatch, RootState } from "@/store/store";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { AddGameDialog } from "./addGameDialog";
+import { useQuery } from "@apollo/client";
+import { GET_GAMES } from "@/graphql/queris";
 
 export default function GameCollection() {
-  const dispatch = useDispatch<AppDispatch>();
-  const games = useSelector((state: RootState) => state.game.games);
-
-  useEffect(() => {
-    dispatch(fetchGames());
-  }, [dispatch]);
+  const { loading, error, data } = useQuery(GET_GAMES);
+  if (loading) return <p>Loading ...</p>;
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">
@@ -20,7 +14,7 @@ export default function GameCollection() {
       <div className="flex justify-end mb-6">
         <AddGameDialog />
       </div>
-      <GameGrid games={games} />
+      <GameGrid games={data.games} />
     </div>
   );
 }
