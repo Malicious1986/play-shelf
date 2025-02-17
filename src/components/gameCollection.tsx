@@ -4,7 +4,7 @@ import { useQuery } from "@apollo/client";
 import { GET_GAMES } from "@/graphql/queris";
 
 export default function GameCollection() {
-  const { loading, error, data } = useQuery(GET_GAMES);
+  const { loading, data } = useQuery(GET_GAMES);
   if (loading) return <p>Loading ...</p>;
   return (
     <div className="container mx-auto p-6">
