@@ -25,3 +25,9 @@ export const DELETE_GAME = gql`
         deleteGame(id: $id)
     }
 `;
+
+export const UPLOAD_IMAGE = gql`
+  mutation UploadImage($file: Upload!) {
+    uploadImage(file: $file)
+  }
+`;

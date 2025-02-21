@@ -40,8 +40,8 @@ export default function GameCard({
           {description}
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex-1">
-        <img src={image}></img>
+      <CardContent className="flex-1 flex justify-center items-center">
+        <img src={image} height={304} width={304}></img>
       </CardContent>
       <CardFooter className="flex flex-col justify-between items-start gap-3">
         <div className="flex justify-between">
