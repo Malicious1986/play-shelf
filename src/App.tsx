@@ -6,6 +6,7 @@ import Home from "@/components/home";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ApolloProvider } from "@apollo/client";
 import client from "./apolloClient"; // Import Apollo Client
+import AuthSuccess from "./components/authSuccess";
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/games" element={<GameCollection />} />
             <Route path="/about" element={<div>About</div>} />
+            <Route path="/auth-success" element={<AuthSuccess />} />
+
           </Routes>
         </main>
 
