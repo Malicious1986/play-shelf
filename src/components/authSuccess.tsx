@@ -1,7 +1,7 @@
 import { login } from "@/store/slices/authSlice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate, useSearchParams, useParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export default function AuthSuccess() {
   const [searchParams] = useSearchParams();
