@@ -2,6 +2,14 @@ import { login } from "@/store/slices/authSlice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
+
+interface JWTTokenPayload {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+}
 
 export default function AuthSuccess() {
   const [searchParams] = useSearchParams();
@@ -11,14 +19,22 @@ export default function AuthSuccess() {
   useEffect(() => {
     const token = searchParams.get("token");
     if (token) {
-      localStorage.setItem("token", token);
-      dispatch(login());
-      navigate("/");
+      try {
+        const decoded: JWTTokenPayload = jwtDecode(token);
+
+        localStorage.setItem("token", token);
+
+        dispatch(login(decoded));
+
+        navigate("/");
+      } catch (error) {
+        console.error("Invalid token:", error);
+        navigate("/login-failed");
+      }
     } else {
-      // TBD: Handle login failure
       navigate("/login-failed");
     }
-  }, [searchParams, navigate]);
+  }, [searchParams, navigate, dispatch]);
 
   return <p>Logging in...</p>;
 }

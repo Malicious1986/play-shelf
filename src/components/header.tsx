@@ -5,13 +5,14 @@ import { Link } from "react-router-dom";
 import LoginButton from "./loginButton";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const { isLoggedIn, user } = useSelector((state: RootState) => state.auth);
 
   return (
-    <header className="shadow-md fixed w-full border-b bg-background">
+    <header className="shadow-md fixed w-full border-b bg-background z-10">
       <div className="container mx-auto flex items-center justify-between p-4">
         {/* Logo & App Name */}
         <Link to="/" className="text-xl font-bold flex items-center space-x-2">
@@ -24,14 +25,26 @@ export default function Header() {
           <Link to="/" className="hover:text-gray-300">
             Home
           </Link>
-          {isLoggedIn ? (
+          {isLoggedIn && (
             <Link to="/games" className="hover:text-gray-300">
               Games
             </Link>
-          ) : null}
+          )}
           <Link to="/about" className="hover:text-gray-300">
             About
           </Link>
+
+          {isLoggedIn ? (
+            <div className="flex items-center space-x-4">
+              <Avatar>
+                <AvatarImage src={user?.avatar} alt={user?.name} />
+                <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <span>{user?.name}</span>
+            </div>
+          ) : (
+            null
+          )}
           <LoginButton />
         </nav>
 
@@ -41,13 +54,13 @@ export default function Header() {
           className="md:hidden"
           onClick={() => setIsOpen(!isOpen)}
         >
-          <Menu size={24} />
+          <Menu />
         </Button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* ✅ Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-gray-800 text-white flex flex-col space-y-2 p-4">
+        <div className="md:hidden bg-gray-800 text-white flex flex-col space-y-4 p-4">
           <Link
             to="/"
             className="hover:text-gray-300"
@@ -55,7 +68,7 @@ export default function Header() {
           >
             Home
           </Link>
-          {isLoggedIn ? (
+          {isLoggedIn && (
             <Link
               to="/games"
               className="hover:text-gray-300"
@@ -63,7 +76,7 @@ export default function Header() {
             >
               Games
             </Link>
-          ) : null}
+          )}
           <Link
             to="/about"
             className="hover:text-gray-300"
@@ -71,6 +84,22 @@ export default function Header() {
           >
             About
           </Link>
+
+          {/* ✅ User Info & Logout in Mobile */}
+          {isLoggedIn ? (
+            <div className="flex flex-col space-y-2 border-t border-gray-600 pt-4">
+              <div className="flex items-center space-x-3">
+                <Avatar>
+                  <AvatarImage src={user?.avatar} alt={user?.name} />
+                  <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <span>{user?.name}</span>
+              </div>
+            </div>
+          ) : (
+            null
+          )}
+          <LoginButton />
         </div>
       )}
     </header>
