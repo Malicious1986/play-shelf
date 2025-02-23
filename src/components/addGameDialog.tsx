@@ -237,7 +237,6 @@ export function AddGameDialog() {
         </DialogContent>
       </Dialog>
 
-      {/* ✅ Image Cropper Dialog */}
       {rawImage && (
         <ImageCropper
           imageSrc={rawImage}
