@@ -11,23 +11,22 @@ import AuthSuccess from "./components/authSuccess";
 function App() {
   return (
     <>
-    <ApolloProvider client={client}>
-      <ThemeProvider storageKey="vite-ui-theme">
-        <Header />
+      <ApolloProvider client={client}>
+        <ThemeProvider storageKey="vite-ui-theme">
+          <Header />
 
-        <main className="mt-16">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/games" element={<GameCollection />} />
-            <Route path="/about" element={<div>About</div>} />
-            <Route path="/auth-success" element={<AuthSuccess />} />
+          <main className="mt-16">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/games" element={<GameCollection />} />
+              <Route path="/about" element={<div>About</div>} />
+              <Route path="/auth-success" element={<AuthSuccess />} />
+            </Routes>
+          </main>
 
-          </Routes>
-        </main>
-
-        <footer></footer>
-      </ThemeProvider>
-    </ApolloProvider>
+          <footer></footer>
+        </ThemeProvider>
+      </ApolloProvider>
     </>
   );
 }

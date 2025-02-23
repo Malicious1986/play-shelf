@@ -61,6 +61,9 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
+button {
+  cursor: pointer;
+}
 
 @media (prefers-color-scheme: dark) {
   :root {
