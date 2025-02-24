@@ -33,7 +33,7 @@ export default function GameCard({
   });
 
   const setRateValue = async (rating: number) => {
-    await updateRate({ variables: { id, rating } });
+    await updateRate({ variables: { updateGameInput: { id, rating } } });
   };
 
   const handleRemove = async () => {
@@ -51,7 +51,13 @@ export default function GameCard({
         </CardHeader>
 
         <CardContent className="flex-1 flex justify-center items-center">
-          <img src={image} height={304} width={304} alt={name} className="rounded-md object-cover" />
+          <img
+            src={image}
+            height={304}
+            width={304}
+            alt={name}
+            className="rounded-md object-cover"
+          />
         </CardContent>
 
         <CardFooter className="flex flex-col justify-between items-start gap-3 w-full">

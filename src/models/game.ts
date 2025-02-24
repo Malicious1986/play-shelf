@@ -1,32 +1,32 @@
 export interface Game {
-    id: string;
-    name: string;
-    description: string;
-    rating: number;
-    image: string;
-    category: string;
+  id: string;
+  name: string;
+  description: string;
+  rating: number;
+  image: string;
+  category: string;
 }
 
 export const boardGameCategories = [
-    'None',
-    "Strategy",
-    "Deck-Building",
-    "Cooperative",
-    "Party",
-    "Abstract",
-    "Worker Placement",
-    "Area Control",
-    "Role-Playing",
-    "Card Games",
-    "Tile Placement",
-    "Dice Games",
-    "War Games",
-    "Family",
-    "Trivia",
-    "Dexterity",
-    "Legacy",
-    "Eurogame",
-    "Bluffing",
-    "Social Deduction",
-    "Word Games"
-  ];
+  "All",
+  "Abstract",
+  "Area Control",
+  "Bluffing",
+  "Card Games",
+  "Cooperative",
+  "Deck-Building",
+  "Dexterity",
+  "Dice Games",
+  "Eurogame",
+  "Family",
+  "Legacy",
+  "Party",
+  "Role-Playing",
+  "Social Deduction",
+  "Strategy",
+  "Tile Placement",
+  "Trivia",
+  "War Games",
+  "Worker Placement",
+  "Word Games",
+];

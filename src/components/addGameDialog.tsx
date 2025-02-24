@@ -78,7 +78,9 @@ export function AddGameDialog() {
       rating: 0,
     };
 
-    await addGame({ variables: newGame });
+    await addGame({ variables: {
+      addGameInput: newGame,
+    } });
     form.reset();
     setImageUrl(null);
     setOpen(false);
@@ -99,19 +101,28 @@ export function AddGameDialog() {
   };
 
   const handleCropComplete = async (croppedImg: Blob | null) => {
-    if (!croppedImg) return;
-
+    if (!croppedImg) {
+      console.error("No cropped image provided");
+      return;
+    }
+  
+    if (croppedImg.size === 0) {
+      console.error("Cropped image is empty");
+      return;
+    }
+  
     try {
       const file = new File([croppedImg], "cropped-image.jpg", {
         type: "image/jpeg",
       });
-
+  
       const { data } = await uploadImage({ variables: { file } });
       setImageUrl(data.uploadImage); // ✅ Save uploaded image URL
     } catch (err) {
       console.error("Image upload failed:", err);
     }
   };
+  
 
   const triggerFileSelect = () => {
     fileInputRef.current?.click();

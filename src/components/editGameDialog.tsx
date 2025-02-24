@@ -74,12 +74,14 @@ export function EditGameDialog({ game, open, onClose }: EditGameDialogProps) {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     await updateGame({
       variables: {
-        id: game.id,
-        name: values.name,
-        description: values.description,
-        image: imageUrl,
-        category: values.category,
-        rating: values.rating,
+        updateGameInput: {
+          id: game.id,
+          name: values.name,
+          description: values.description,
+          image: imageUrl,
+          category: values.category,
+          rating: values.rating,
+        },
       },
     });
 
@@ -106,7 +108,9 @@ export function EditGameDialog({ game, open, onClose }: EditGameDialogProps) {
     if (!croppedImg) return;
 
     try {
-      const file = new File([croppedImg], "cropped-image.jpg", { type: "image/jpeg" });
+      const file = new File([croppedImg], "cropped-image.jpg", {
+        type: "image/jpeg",
+      });
 
       const { data } = await uploadImage({ variables: { file } });
       setImageUrl(data.uploadImage); // ✅ Save uploaded image URL
@@ -162,7 +166,11 @@ export function EditGameDialog({ game, open, onClose }: EditGameDialogProps) {
 
               <FormItem>
                 <FormLabel>Image:</FormLabel>
-                <Button type="button" onClick={triggerFileSelect} className="w-fit">
+                <Button
+                  type="button"
+                  onClick={triggerFileSelect}
+                  className="w-fit"
+                >
                   {uploading ? "Uploading..." : "Change Image"}
                 </Button>
 

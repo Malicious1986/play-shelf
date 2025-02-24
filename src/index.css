@@ -46,7 +46,6 @@ body {
   min-width: 320px;
   min-height: 100vh;
   justify-content: center;
-  background-image: url("/images/background.jpg");
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
