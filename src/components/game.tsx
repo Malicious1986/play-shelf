@@ -14,6 +14,8 @@ import { DELETE_GAME, UPDATE_GAME_RATE } from "@/graphql/mutations";
 import { GET_GAMES } from "@/graphql/queris";
 import { useState } from "react";
 import { EditGameDialog } from "./editGameDialog";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 export default function GameCard({
   name,
@@ -24,12 +26,13 @@ export default function GameCard({
   category,
 }: Game) {
   const [editOpen, setEditOpen] = useState(false);
+  const filters = useSelector((state: RootState) => state.filters.filters);
   const [updateRate] = useMutation(UPDATE_GAME_RATE, {
-    refetchQueries: [{ query: GET_GAMES }],
+    refetchQueries: [{ query: GET_GAMES, variables: filters }],
   });
 
   const [deleteGame] = useMutation(DELETE_GAME, {
-    refetchQueries: [{ query: GET_GAMES }],
+    refetchQueries: [{ query: GET_GAMES, variables: filters }],
   });
 
   const setRateValue = async (rating: number) => {

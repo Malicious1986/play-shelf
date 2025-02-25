@@ -33,16 +33,19 @@ import { useRef, useState } from "react";
 import { ADD_GAME, UPLOAD_IMAGE } from "@/graphql/mutations";
 import { GET_GAMES } from "@/graphql/queris";
 import ImageCropper from "@/components/imageCrop/imageCropper";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 export function AddGameDialog() {
   const [open, setOpen] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [cropperOpen, setCropperOpen] = useState<boolean>(false);
   const [rawImage, setRawImage] = useState<string | null>(null);
+  const filters = useSelector((state: RootState) => state.filters.filters);
 
   const [uploadImage, { loading: uploading }] = useMutation(UPLOAD_IMAGE);
   const [addGame] = useMutation(ADD_GAME, {
-    refetchQueries: [{ query: GET_GAMES }],
+    refetchQueries: [{ query: GET_GAMES, variables: filters }],
   });
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -65,15 +68,10 @@ export function AddGameDialog() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (!imageUrl) {
-      alert("Please upload an image before submitting!");
-      return;
-    }
-
     const newGame: Omit<Game, "id"> = {
       name: values.name,
       description: values.description ?? "",
-      image: imageUrl,
+      image: imageUrl || './images/fallback.jpg',
       category: values.category ?? "",
       rating: 0,
     };
@@ -239,7 +237,7 @@ export function AddGameDialog() {
                   )}
                 />
 
-                <Button type="submit" disabled={!imageUrl}>
+                <Button type="submit" disabled={form.getFieldState("name").invalid || uploading}>
                   {uploading ? "Uploading Image..." : "Add Game"}
                 </Button>
               </form>
