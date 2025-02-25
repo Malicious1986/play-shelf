@@ -31,7 +31,7 @@ import { boardGameCategories, Game } from "@/models/game";
 import { useState, useRef } from "react";
 import { UPDATE_GAME, UPLOAD_IMAGE } from "@/graphql/mutations";
 import ImageCropper from "@/components/imageCrop/imageCropper";
-import { GET_GAMES } from "@/graphql/queris";
+import { GET_GAMES } from "@/graphql/queries";
 
 interface EditGameDialogProps {
   game: Game; // Existing game data

@@ -1,7 +1,7 @@
 import { Game } from "@/models/game";
 import GameCard from "@/components/game";
 import { useQuery } from "@apollo/client";
-import { GET_GAMES } from "@/graphql/queris";
+import { GET_GAMES } from "@/graphql/queries";
 import { Loader2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";

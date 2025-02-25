@@ -1,6 +1,6 @@
 import GameGrid from "@/components/grid";
-import { AddGameDialog } from "./addGameDialog";
-import GameFilters from "./gameFilters";
+import { AddGameDialog } from "@/components/addGameDialog";
+import GameFilters from "@/components/gameFilters";
 
 export default function GameCollection() {
   return (

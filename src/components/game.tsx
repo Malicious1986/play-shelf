@@ -8,14 +8,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import GameRateItem from "./gameRateItem";
+import GameRating from "@/components/gameRating";
 import { Button } from "./ui/button";
 import { DELETE_GAME, UPDATE_GAME_RATE } from "@/graphql/mutations";
-import { GET_GAMES } from "@/graphql/queris";
+import { GET_GAMES } from "@/graphql/queries";
 import { useState } from "react";
 import { EditGameDialog } from "./editGameDialog";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { useNavigate } from "react-router-dom";
 
 export default function GameCard({
   name,
@@ -27,6 +28,8 @@ export default function GameCard({
 }: Game) {
   const [editOpen, setEditOpen] = useState(false);
   const filters = useSelector((state: RootState) => state.filters.filters);
+  const navigate = useNavigate();
+
   const [updateRate] = useMutation(UPDATE_GAME_RATE, {
     refetchQueries: [{ query: GET_GAMES, variables: filters }],
   });
@@ -35,19 +38,23 @@ export default function GameCard({
     refetchQueries: [{ query: GET_GAMES, variables: filters }],
   });
 
-  const setRateValue = async (rating: number) => {
-    await updateRate({ variables: { updateGameInput: { id, rating } } });
+  const setRateValue = async (newRating: number) => {
+    await updateRate({ variables: { updateGameInput: { id, rating: newRating } } });
   };
 
   const handleRemove = async () => {
     await deleteGame({ variables: { id } });
   };
 
+  const handleCardClick = () => {
+    navigate(`/games/${id}`);
+  };
+
   return (
     <>
-      <Card className="flex flex-col">
+      <Card className="flex flex-col hover:shadow-lg cursor-pointer" onClick={handleCardClick}>
         <CardHeader>
-          <CardTitle>{name}</CardTitle>
+          <CardTitle className="truncate">{name}</CardTitle>
           <CardDescription className="h-10 line-clamp-2">
             {description}
           </CardDescription>
@@ -64,29 +71,26 @@ export default function GameCard({
         </CardContent>
 
         <CardFooter className="flex flex-col justify-between items-start gap-3 w-full">
-          <div className="flex justify-between w-full">
-            {Array.from({ length: 5 }).map((_, index) => (
-              <GameRateItem
-                key={index}
-                rateLevel={index}
-                isActive={index < rating}
-                setRateValue={setRateValue}
-              />
-            ))}
-          </div>
+          <GameRating rating={rating} onRate={setRateValue} />
 
           <div className="flex gap-2 w-full">
             <Button
               className="flex-1"
               variant="secondary"
-              onClick={() => setEditOpen(true)} // ✅ Open Edit Dialog
+              onClick={(e) => {
+                e.stopPropagation();
+                setEditOpen(true);
+              }}
             >
               Edit
             </Button>
 
             <Button
               className="flex-1"
-              onClick={handleRemove}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleRemove();
+              }}
               variant="destructive"
             >
               Remove

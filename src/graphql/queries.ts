@@ -12,3 +12,16 @@ export const GET_GAMES = gql`
     }
   }
 `;
+
+export const GET_GAME_DETAILS = gql`
+  query GetGameDetails($id: ID!) {
+    game(id: $id) {
+      id
+      name
+      description
+      image
+      category
+      rating
+    }
+  }
+`;
