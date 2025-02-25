@@ -1,5 +1,4 @@
 import "./App.css";
-import GameCollection from "@/components/gameCollection";
 import Header from "@/components/header";
 import { Route, Routes } from "react-router-dom";
 import Home from "@/components/home";
