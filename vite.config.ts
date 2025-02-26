@@ -25,6 +25,13 @@ const vitestConfig = defineVitestConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: "./src/setupTests.js",
+    coverage: {
+      include: ["src/components/**", "src/pages/**"],
+      exclude: [
+        "src/components/ui/**",
+        "src/utils/constants.ts",
+      ],
+    },
   },
 });
 
