@@ -7,6 +7,7 @@ import client from "@/apolloClient";
 import { lazy, Suspense } from "react";
 import Footer from "@/components/footer";
 import PrivateRoute from "@/pages/privateRoute";
+import SharedGames from "./pages/sharedGames";
 
 const Games = lazy(() => import("@/pages/gameCollection"));
 const GameDetails = lazy(() => import("@/pages/gameDetails"));
@@ -30,6 +31,7 @@ function App() {
                   <Route path="/games/:id" element={<GameDetails />} />
                 </Route>
                 <Route path="/" element={<Home />} />
+                <Route path="/shared/:shareId" element={<SharedGames />} />
                 <Route path="/auth-success" element={<AuthSuccess />} />
                 <Route path="*" element={<PageNotFound />} />
               </Routes>

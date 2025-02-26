@@ -2,20 +2,16 @@ import { Game } from "@/models/game";
 import GameCard from "@/components/game";
 import { useQuery } from "@apollo/client";
 import { GET_GAMES } from "@/graphql/queries";
-import { Loader2, Dices } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import NoGames from "@/components/noGames";
 
 interface GameGridProps {
   className?: string;
 }
 
-const NoGames = () => (
-  <div className="w-full flex flex-col items-center justify-center space-y-4">
-  <Dices className="w-32 h-32 text-gray-600" />
-  <p className="text-3xl text-gray-600">No games added yet...</p>
-</div>
-);
+
 
 export default function GameGrid({ className = "" }: GameGridProps) {
   const filters = useSelector((state: RootState) => state.filters.filters);

@@ -25,3 +25,19 @@ export const GET_GAME_DETAILS = gql`
     }
   }
 `;
+
+export const GET_SHARED_GAMES = gql`
+  query SharedGames($shareId: ID!) {
+    sharedGames(shareId: $shareId) {
+      username
+      games {
+        id
+        name
+        description
+        image
+        category
+        rating
+      }
+    }
+  }
+`;

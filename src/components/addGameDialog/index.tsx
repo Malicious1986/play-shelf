@@ -29,14 +29,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "@/components/ui/select";
 import { boardGameCategories, Game } from "@/models/game";
 import { useRef, useState } from "react";
 import { ADD_GAME, UPLOAD_IMAGE } from "@/graphql/mutations";
@@ -45,6 +45,7 @@ import ImageCropper from "@/components/imageCrop/imageCropper";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { Plus } from "lucide-react";
 
 export function AddGameDialog() {
   const [open, setOpen] = useState(false);
@@ -59,7 +60,7 @@ export function AddGameDialog() {
   });
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const isDesktop = useMediaQuery("(min-width: 768px)"); // ✅ Detect Desktop
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const formSchema = z.object({
     name: z.string().min(2).max(50),
@@ -231,7 +232,7 @@ export function AddGameDialog() {
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button className="cursor-pointer" variant="outline">
-              Add game
+              <Plus /> Add game
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
@@ -248,7 +249,7 @@ export function AddGameDialog() {
         <Drawer open={open} onOpenChange={setOpen}>
           <DrawerTrigger asChild>
             <Button className="cursor-pointer" variant="outline">
-              Add game
+            <Plus />
             </Button>
           </DrawerTrigger>
           <DrawerContent>

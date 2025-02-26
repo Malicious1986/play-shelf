@@ -12,6 +12,7 @@ import { boardGameCategories } from "@/models/game";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setFilters } from "@/store/slices/filtersSlice";
+import { FilterX } from "lucide-react";
 
 
 export default function GameFilters() {
@@ -29,14 +30,14 @@ export default function GameFilters() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-4">
+    <div className="flex gap-4">
       {/* ✅ Category Filter */}
       <Select
         value={filters.category as string}
         onValueChange={(value) => handleFilterChange("category", value)}
       >
         <SelectTrigger>
-          <SelectValue placeholder="Select Category" />
+          <SelectValue />
         </SelectTrigger>
         <SelectContent>
           {boardGameCategories.map((category) => (
@@ -49,7 +50,7 @@ export default function GameFilters() {
 
       {/* ✅ Reset Button */}
       <Button variant="outline" onClick={handleReset}>
-        Reset Filters
+        <FilterX/> <span className="md:inline hidden">Reset Filters</span>
       </Button>
     </div>
   );

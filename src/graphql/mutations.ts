@@ -45,3 +45,9 @@ export const UPLOAD_IMAGE = gql`
     uploadImage(file: $file)
   }
 `;
+
+export const GENERATE_SHARE_LINK = gql`
+  mutation GenerateShareLink {
+    generateShareLink
+  }
+`;
