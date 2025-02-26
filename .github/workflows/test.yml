@@ -30,8 +30,11 @@ jobs:
         with:
           name: coverage-report
           path: coverage
-          retention-days: 7  # Keeps reports for 7 days
-
+          retention-days: 7
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
   deploy:
     needs: test
     runs-on: ubuntu-latest
