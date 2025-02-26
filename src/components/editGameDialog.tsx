@@ -149,7 +149,6 @@ export function EditGameDialog({ game, open, onClose }: EditGameDialogProps) {
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="description"
