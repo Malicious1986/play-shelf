@@ -1,4 +1,4 @@
-name: Run Tests
+name: Run Tests and Deploy
 
 on: [push, pull_request]
 
@@ -20,3 +20,14 @@ jobs:
 
       - name: Run Tests
         run: yarn test
+        continue-on-error: false # ❌ Ensures workflow fails if tests fail
+
+  deploy:
+    needs: test  # 🚀 Only deploy if tests pass
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Vercel
+        run: yarn global add vercel && vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
