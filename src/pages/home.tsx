@@ -7,6 +7,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import withAuth from "@/hoc/withAuth";
+const ProtectedExploreGamesButton = withAuth(function ExploreGamesButton() {
+  return (
+    <Link to="/games">
+      <Button className="px-6 py-3 text-lg">📜 Explore Games</Button>
+    </Link>
+  );
+});
+
 export default function Home() {
   return (
     <div>
@@ -60,9 +69,7 @@ export default function Home() {
         <h2 className="text-2xl font-bold mb-4">
           Start Building Your Collection Today!
         </h2>
-        <Link to="/games">
-          <Button className="px-6 py-3 text-lg">📜 Explore Games</Button>
-        </Link>
+        <ProtectedExploreGamesButton />
       </section>
     </div>
   );

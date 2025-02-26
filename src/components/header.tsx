@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { Link } from "react-router-dom";
-import LoginButton from "./loginButton";
+import LogoutButton from "@/components/logoutButton";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -45,7 +45,7 @@ export default function Header() {
           ) : (
             null
           )}
-          <LoginButton />
+          <LogoutButton />
         </nav>
 
         {/* Mobile Menu Button */}
@@ -99,7 +99,7 @@ export default function Header() {
           ) : (
             null
           )}
-          <LoginButton />
+          <LogoutButton />
         </div>
       )}
     </header>
