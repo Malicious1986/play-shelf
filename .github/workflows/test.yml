@@ -1,6 +1,9 @@
-name: Run Tests
+name: Run Tests and Deploy to Vercel
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   test:
@@ -20,3 +23,17 @@ jobs:
 
       - name: Run Tests
         run: yarn test
+        continue-on-error: false
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Vercel CLI
+        run: yarn global add vercel
+
+      - name: Deploy to Vercel
+        run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
