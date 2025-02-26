@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  pull_request:
 
 jobs:
   test:
@@ -21,9 +22,15 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Run Tests
-        run: yarn test
-        continue-on-error: false
+      - name: Run Tests with Coverage
+        run: yarn test:coverage
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage
+          retention-days: 7  # Keeps reports for 7 days
 
   deploy:
     needs: test

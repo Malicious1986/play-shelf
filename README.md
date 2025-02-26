@@ -1,4 +1,6 @@
 # React + TypeScript + Vite
+![Tests](https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/actions/workflows/test.yml/badge.svg)
+
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
