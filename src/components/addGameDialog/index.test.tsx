@@ -18,7 +18,7 @@ const mocks = [
                 addGameInput: {
                     name: "Test Game",
                     description: "Test Description",
-                    image: "./images/fallback.jp",
+                    image: "./images/fallback.jpg",
                     category: "",
                     rating: 0,
                 },
