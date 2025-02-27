@@ -11,8 +11,6 @@ interface GameGridProps {
   className?: string;
 }
 
-
-
 export default function GameGrid({ className = "" }: GameGridProps) {
   const filters = useSelector((state: RootState) => state.filters.filters);
   const { loading, data } = useQuery(GET_GAMES, {
@@ -41,11 +39,11 @@ export default function GameGrid({ className = "" }: GameGridProps) {
           ))
         ) : (
           <div className="w-full flex flex-col items-center justify-center space-y-4">
-            <p className="text-lg text-gray-600">
-              {filters["category"] === "All"
-                ? <NoGames />
-                : `No games with category ${filters["category"]}`}
-            </p>
+            {filters["category"] === "All" ? (
+              <NoGames />
+            ) : (
+              <p>No games with category {filters["category"]}</p>
+            )}
           </div>
         )}
       </div>
