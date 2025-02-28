@@ -1,14 +1,17 @@
 import { gql } from "@apollo/client";
 
 export const GET_GAMES = gql`
-  query GetGames($category: String, $minRating: Float) {
-    games(category: $category, minRating: $minRating) {
-      id
-      name
-      description
-      image
-      rating
-      category
+  query GetGames($limit: Int!, $offset: Int!, $category: String, $minRating: Float) {
+    games(limit: $limit, offset: $offset, category: $category, minRating: $minRating) {
+      games {
+        id
+        name
+        description
+        image
+        rating
+        category
+      }
+      hasMore
     }
   }
 `;

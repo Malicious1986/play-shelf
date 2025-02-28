@@ -6,16 +6,45 @@ import { Loader2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import NoGames from "@/components/noGames";
+import { useInView } from "react-intersection-observer";
+import { useEffect, useState } from "react";
+
+const LIMIT = 8;
 
 interface GameGridProps {
   className?: string;
 }
 
 export default function GameGrid({ className = "" }: GameGridProps) {
+  const [games, setGames] = useState<Game[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+  const { ref, inView } = useInView();
   const filters = useSelector((state: RootState) => state.filters.filters);
-  const { loading, data } = useQuery(GET_GAMES, {
-    variables: filters,
+  const { loading, data, fetchMore } = useQuery(GET_GAMES, {
+    variables: {...filters, limit: LIMIT, offset: 0},
   });
+
+  useEffect(() => {
+    if (data?.games) {
+      setGames(data.games.games);
+      setHasMore(data.games.hasMore);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (inView && hasMore) {
+      console.log("fetching more games");
+      fetchMore({
+        variables: { limit: LIMIT, offset: games.length, ...filters },
+      }).then(({ data }) => {
+        if (data?.games?.games.length) {
+          setGames((prev) => [...prev, ...data.games.games]);
+          setHasMore(data.games.hasMore);
+        }
+      });
+    }
+  }, [inView, hasMore, games.length, fetchMore]);
+
 
   if (loading)
     return (
@@ -28,13 +57,13 @@ export default function GameGrid({ className = "" }: GameGridProps) {
     <>
       <div
         className={`grid grid-cols-1 ${
-          data?.games?.length
+          games?.length
             ? "sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
             : ""
         }  ${className}`}
       >
-        {data?.games?.length ? (
-          data.games.map((game: Game, index: number) => (
+        {games?.length ? (
+          games.map((game: Game, index: number) => (
             <GameCard key={index} {...game} />
           ))
         ) : (
@@ -46,6 +75,7 @@ export default function GameGrid({ className = "" }: GameGridProps) {
             )}
           </div>
         )}
+        <div ref={ref} className="h-10" />
       </div>
     </>
   );
