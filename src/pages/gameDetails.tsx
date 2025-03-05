@@ -1,19 +1,25 @@
 // src/pages/GameDetails.tsx
 import { useParams, useNavigate } from "react-router-dom";
-import { useMutation, useQuery } from "@apollo/client";
-import { GET_GAME_DETAILS } from "@/graphql/queries";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import GameRating from "@/components/gameRating";
-import { UPDATE_GAME_RATE } from "@/graphql/mutations";
+import { useGetGameDetailsQuery, useUpdateGameMutation } from "@/graphql/types";
 
 export default function GameDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [updateRate] = useMutation(UPDATE_GAME_RATE);
+  const [updateRate] = useUpdateGameMutation();
 
-  const { loading, error, data } = useQuery(GET_GAME_DETAILS, {
-    variables: { id },
+  if (!id) {
+    return (
+      <div className="h-screen w-full flex flex-col items-center justify-center">
+        <p className="text-red-500">Invalid game ID. Please try again.</p>
+      </div>
+    );
+  }
+
+  const { loading, error, data } = useGetGameDetailsQuery({
+    variables: {id: id || ''},
   });
 
   if (loading) {
@@ -25,17 +31,21 @@ export default function GameDetails() {
     );
   }
 
-  if (error) {
+  if (error || !data?.game) {
     return (
       <div className="h-screen w-full flex flex-col items-center justify-center">
-        <p className="text-red-500">Error loading game details. Please try again.</p>
+        <p className="text-red-500">
+          Error loading game details. Please try again.
+        </p>
       </div>
     );
   }
 
-  const { name, description, image, category, rating } = data.game;
+  const { name, description, image, category, rating } = data?.game;
   const handleRate = async (newRating: number) => {
-    await updateRate({ variables: { updateGameInput: { id, rating: newRating } } });
+    await updateRate({
+      variables: { updateGameInput: { id, rating: newRating } },
+    });
   };
   return (
     <div className="container mx-auto p-6">
@@ -51,7 +61,7 @@ export default function GameDetails() {
         {/* Game Image */}
         <div className="flex justify-center">
           <img
-            src={image}
+            src={image || "./images/fallback.jpg"}
             alt={name}
             className="rounded-lg shadow-lg w-full max-w-md object-cover"
           />
@@ -60,13 +70,15 @@ export default function GameDetails() {
         {/* Game Details */}
         <div className="flex flex-col justify-center">
           <h1 className="text-4xl font-bold mb-4">{name}</h1>
-          <p className="text-gray-400 mb-4">{description || "No description available."}</p>
+          <p className="text-gray-400 mb-4">
+            {description || "No description available."}
+          </p>
           <p className="mb-4">
             <strong>Category:</strong> {category || "Uncategorized"}
           </p>
           <div className="flex items-center space-x-1 mb-4">
             <strong>Rating:</strong>
-            <GameRating rating={rating} onRate={handleRate} />
+            <GameRating rating={rating || 0} onRate={handleRate} />
           </div>
         </div>
       </div>

@@ -1,27 +1,62 @@
-import { Game } from "@/models/game";
 import GameCard from "@/components/game";
-import { useQuery } from "@apollo/client";
-import { GET_GAMES } from "@/graphql/queries";
 import { Loader2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import NoGames from "@/components/noGames";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useState } from "react";
+import {
+  Game,
+  useDeleteGameMutation,
+  useGetGamesQuery,
+  useUpdateGameMutation,
+} from "@/graphql/types";
+import { useNavigate } from "react-router-dom";
+import EditGameDialog from "@/components/editGameDialog";
 
 const LIMIT = 8;
 
 interface GameGridProps {
   className?: string;
+  games?: Game[];
 }
 
 export default function GameGrid({ className = "" }: GameGridProps) {
+  const navigate = useNavigate();
   const [games, setGames] = useState<Game[]>([]);
+  const [currentGame, setCurrentGame] = useState<Game | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const { ref, inView } = useInView();
   const filters = useSelector((state: RootState) => state.filters.filters);
-  const { loading, data, fetchMore } = useQuery(GET_GAMES, {
-    variables: {...filters, limit: LIMIT, offset: 0},
+  const [editOpen, setEditOpen] = useState(false);
+  const [updateRate] = useUpdateGameMutation();
+  const [deleteGame] = useDeleteGameMutation({
+    update(cache, { data }) {
+      if (!data?.deleteGame) return;
+
+      cache.modify({
+        fields: {
+          games(existingGamesRefs = {}, { readField }) {
+            const filteredGames = existingGamesRefs.games.filter(
+              (gameRef: any) => {
+                return (
+                  data?.deleteGame.id.toString() !== readField("id", gameRef)
+                );
+              }
+            );
+
+            return {
+              ...existingGamesRefs,
+              games: filteredGames,
+            };
+          },
+        },
+      });
+    },
+  });
+
+  const { loading, data, fetchMore } = useGetGamesQuery({
+    variables: { ...filters, limit: LIMIT, offset: 0 },
   });
 
   useEffect(() => {
@@ -33,9 +68,12 @@ export default function GameGrid({ className = "" }: GameGridProps) {
 
   useEffect(() => {
     if (inView && hasMore) {
-      console.log("fetching more games");
       fetchMore({
-        variables: { limit: LIMIT, offset: games.length, ...filters },
+        variables: {
+          limit: LIMIT,
+          offset: games.length % LIMIT ? LIMIT : games.length,
+          ...filters,
+        },
       }).then(({ data }) => {
         if (data?.games?.games.length) {
           setGames((prev) => [...prev, ...data.games.games]);
@@ -43,8 +81,7 @@ export default function GameGrid({ className = "" }: GameGridProps) {
         }
       });
     }
-  }, [inView, hasMore, games.length, fetchMore]);
-
+  }, [inView, hasMore]);
 
   if (loading)
     return (
@@ -53,18 +90,53 @@ export default function GameGrid({ className = "" }: GameGridProps) {
         <p className="text-lg text-white">Loading your games...</p>
       </div>
     );
+
+  const onEditHandler = (game: Game) => {
+    setCurrentGame(game);
+    setEditOpen(true);
+  };
+
+  const onUpdateRateHandler = async ({
+    id,
+    rate,
+  }: {
+    id: string;
+    rate: number;
+  }) => {
+    await updateRate({
+      variables: {
+        updateGameInput: {
+          id,
+          rating: rate,
+        },
+      },
+    });
+  };
+
+  const handleDeleteHandler = async (id: string) => {
+    await deleteGame({ variables: { id } });
+  };
+
+  const onCardClickHandler = (id: string) => {
+    navigate(`/games/${id}`);
+  };
   return (
     <>
       <div
         className={`grid grid-cols-1 ${
-          games?.length
-            ? "sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-            : ""
+          games?.length ? " md:grid-cols-3 lg:grid-cols-4 gap-6" : ""
         }  ${className}`}
       >
         {games?.length ? (
           games.map((game: Game, index: number) => (
-            <GameCard key={index} {...game} />
+            <GameCard
+              key={index}
+              game={game}
+              onEdit={onEditHandler}
+              onUpdateRate={onUpdateRateHandler}
+              onDelete={handleDeleteHandler}
+              onCardClick={onCardClickHandler}
+            />
           ))
         ) : (
           <div className="w-full flex flex-col items-center justify-center space-y-4">
@@ -77,6 +149,13 @@ export default function GameGrid({ className = "" }: GameGridProps) {
         )}
         <div ref={ref} className="h-10" />
       </div>
+      {currentGame && editOpen ? (
+        <EditGameDialog
+          game={currentGame}
+          open={editOpen}
+          onClose={() => setEditOpen(false)}
+        />
+      ) : null}
     </>
   );
 }

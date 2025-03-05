@@ -1,0 +1,12 @@
+mutation UpdateGame($updateGameInput: UpdateGameInput!) {
+  updateGame(updateGameInput: $updateGameInput) {
+    game {
+      id
+      name
+      description
+      rating
+      image
+      category
+    }
+  }
+}

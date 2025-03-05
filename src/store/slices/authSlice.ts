@@ -1,10 +1,6 @@
+import { User } from "@/graphql/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  avatar: string;
-}
+
 interface AuthState {
   isLoggedIn: boolean;
   user: User | null;

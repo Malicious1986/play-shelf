@@ -1,0 +1,13 @@
+  mutation AddGame($addGameInput: AddGameInput!) {
+    addGame(addGameInput: $addGameInput) {
+      ...baseResponseFragment
+      game {
+        id
+        name
+        description
+        rating
+        image
+        category
+      }
+    }
+  }

@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { useMutation } from "@apollo/client";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -37,26 +36,32 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { boardGameCategories, Game } from "@/models/game";
+import { boardGameCategories } from "@/models/game";
 import { useRef, useState } from "react";
-import { ADD_GAME, UPLOAD_IMAGE } from "@/graphql/mutations";
-import { GET_GAMES } from "@/graphql/queries";
 import ImageCropper from "@/components/imageCrop/imageCropper";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Plus } from "lucide-react";
+import {
+  Game,
+  GetGamesDocument,
+  useAddGameMutation,
+  useUploadImageMutation,
+} from "@/graphql/types";
 
-export function AddGameDialog() {
+export default function AddGameDialog() {
   const [open, setOpen] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [cropperOpen, setCropperOpen] = useState<boolean>(false);
   const [rawImage, setRawImage] = useState<string | null>(null);
-  const filters = useSelector((state: RootState) => state.filters.filters);
 
-  const [uploadImage, { loading: uploading }] = useMutation(UPLOAD_IMAGE);
-  const [addGame] = useMutation(ADD_GAME, {
-    refetchQueries: [{ query: GET_GAMES, variables: filters }],
+  const [uploadImage, { loading: uploading }] = useUploadImageMutation();
+  const [addGame] = useAddGameMutation({
+    refetchQueries: [
+      {
+        query: GetGamesDocument,
+        variables: { category: "All", limit: 8, offset: 0 },
+      },
+    ],
   });
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -83,12 +88,14 @@ export function AddGameDialog() {
     const newGame: Omit<Game, "id"> = {
       name: values.name,
       description: values.description ?? "",
-      image: imageUrl || './images/fallback.jpg',
+      image: imageUrl || "./images/fallback.jpg",
       category: values.category ?? "",
       rating: 0,
     };
 
-    await addGame({ variables: { addGameInput: newGame } });
+    const data = await addGame({ variables: { addGameInput: newGame } });
+    if (!data.errors?.length && data.data?.addGame?.game) {
+    }
     form.reset();
     setImageUrl(null);
     setOpen(false);
@@ -117,7 +124,7 @@ export function AddGameDialog() {
       });
 
       const { data } = await uploadImage({ variables: { file } });
-      setImageUrl(data.uploadImage);
+      setImageUrl(data?.uploadImage.url || "./images/fallback.jpg");
     } catch (err) {
       console.error("Image upload failed:", err);
     }
@@ -218,7 +225,10 @@ export function AddGameDialog() {
             )}
           />
 
-          <Button type="submit" disabled={form.getFieldState("name").invalid || uploading}>
+          <Button
+            type="submit"
+            disabled={form.getFieldState("name").invalid || uploading}
+          >
             {uploading ? "Uploading Image..." : "Add Game"}
           </Button>
         </form>
@@ -249,7 +259,7 @@ export function AddGameDialog() {
         <Drawer open={open} onOpenChange={setOpen}>
           <DrawerTrigger asChild>
             <Button className="cursor-pointer" variant="outline">
-            <Plus />
+              <Plus />
             </Button>
           </DrawerTrigger>
           <DrawerContent>

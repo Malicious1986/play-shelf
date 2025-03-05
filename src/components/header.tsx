@@ -37,7 +37,7 @@ export default function Header() {
           {isLoggedIn ? (
             <div className="flex items-center space-x-4">
               <Avatar>
-                <AvatarImage src={user?.avatar} alt={user?.name} />
+                <AvatarImage src={user?.avatar || ''} alt={user?.name} />
                 <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
               </Avatar>
               <span>{user?.name}</span>
@@ -90,7 +90,7 @@ export default function Header() {
             <div className="flex flex-col space-y-2 border-t border-gray-600 pt-4">
               <div className="flex items-center space-x-3">
                 <Avatar>
-                  <AvatarImage src={user?.avatar} alt={user?.name} />
+                  <AvatarImage src={user?.avatar || ''} alt={user?.name} />
                   <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <span>{user?.name}</span>
