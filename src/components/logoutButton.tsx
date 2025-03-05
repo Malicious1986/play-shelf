@@ -1,7 +1,8 @@
+import { useDispatch, useSelector } from "react-redux";
+
 import { Button } from "@/components/ui/button";
 import { logout } from "@/store/slices/authSlice";
 import { RootState } from "@/store/store";
-import { useDispatch, useSelector } from "react-redux";
 
 const API_URL = import.meta.env.VITE_API;
 

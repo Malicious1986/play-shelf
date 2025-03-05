@@ -1,8 +1,8 @@
+import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
 import { defineConfig as defineViteConfig, mergeConfig } from "vite";
 import { defineConfig as defineVitestConfig } from "vitest/config";
-import path from "path";
-import react from "@vitejs/plugin-react";
-import tailwindcss from "@tailwindcss/vite";
 
 // https://vitejs.dev/config/
 const viteConfig = defineViteConfig({

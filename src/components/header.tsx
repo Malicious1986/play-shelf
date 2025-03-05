@@ -1,11 +1,12 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
-import { Link } from "react-router-dom";
-import LogoutButton from "@/components/logoutButton";
+import { useState } from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+
+import LogoutButton from "@/components/logoutButton";
+import { Avatar, AvatarFallback,AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { RootState } from "@/store/store";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);

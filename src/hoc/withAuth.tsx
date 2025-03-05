@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+
 import LoginButton from "@/components/loginButton";
+import { RootState } from "@/store/store";
 
 type WithAuthProps<T> = T & { fallback?: React.ReactNode };
 

@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { login } from "@/store/slices/authSlice";
 import { useRegisterMutation } from "@/graphql/types";
+import { login } from "@/store/slices/authSlice";
 
 const API_URL = import.meta.env.VITE_API;
 

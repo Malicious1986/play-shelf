@@ -1,13 +1,14 @@
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
 import withAuth from "@/hoc/withAuth";
+
 const ProtectedExploreGamesButton = withAuth(function ExploreGamesButton() {
   return (
     <Link to="/games">

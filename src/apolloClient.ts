@@ -1,8 +1,8 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import createUploadLink from "apollo-upload-client/createUploadLink.mjs";
 import { onError } from "@apollo/client/link/error";
 import { Observable } from "@apollo/client/utilities";
+import createUploadLink from "apollo-upload-client/createUploadLink.mjs";
 
 const API_URL = import.meta.env.VITE_API;
 const GQL_API_URL = `${API_URL}/graphql`;
@@ -25,7 +25,7 @@ const authLink = setContext((_, { headers }) => {
 // Handle Expired Access Token & Refresh It
 const errorLink = onError(({ graphQLErrors, operation, forward }) => {
   if (graphQLErrors) {
-    for (let err of graphQLErrors) {
+    for (const err of graphQLErrors) {
       if (err.extensions?.code === "UNAUTHENTICATED") {
         return new Observable(observer => {
           fetch(`${API_URL}/refresh-token`, {

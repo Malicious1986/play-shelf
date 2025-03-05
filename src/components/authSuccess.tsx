@@ -1,8 +1,9 @@
-import { login } from "@/store/slices/authSlice";
+import {jwtDecode} from "jwt-decode";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import {jwtDecode} from "jwt-decode";
+
+import { login } from "@/store/slices/authSlice";
 
 interface JWTTokenPayload {
   id: string;
