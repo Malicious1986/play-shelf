@@ -1,23 +1,23 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
-  schema: "http://localhost:5050/graphql", // Replace with your backend GraphQL URL
-  documents: "src/graphql/**/*.graphql", // ✅ Make sure it matches your .gql file locations
+  schema: "http://localhost:5050/graphql",
+  documents: "src/graphql/**/*.graphql",
   generates: {
     "src/graphql/types.ts": {
       plugins: [
         "typescript",
         "typescript-operations",
-        "typescript-react-apollo"
+        "typescript-react-apollo",
       ],
       config: {
-        withHooks: true,       // ✅ Enables `useQuery` and `useMutation`
-        withComponent: false,  // ❌ Not needed for functional components
-        withHOC: false,        // ❌ Disable higher-order components
-        addDocBlocks: true     // ✅ Adds JSDoc comments to improve IntelliSense
-      }
-    }
-  }
+        withHooks: true,
+        withComponent: false,
+        withHOC: false,
+        addDocBlocks: true,
+      },
+    },
+  },
 };
 
 export default config;

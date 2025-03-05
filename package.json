@@ -7,13 +7,13 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "lint:fix": "eslint --fix",
     "preview": "vite preview",
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest run --coverage",
     "generate:types": "graphql-codegen --config codegen.ts",
-    "generate:watch": "graphql-codegen --config codegen.ts --watch",
-    "eslint": "eslint --fix"
+    "generate:watch": "graphql-codegen --config codegen.ts --watch"
   },
   "dependencies": {
     "@apollo/client": "^3.13.1",
