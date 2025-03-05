@@ -82,6 +82,7 @@ export default function GameGrid({ className = "" }: GameGridProps) {
         }
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView, hasMore]);
 
   if (loading)

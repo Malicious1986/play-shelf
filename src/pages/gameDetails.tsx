@@ -1,6 +1,5 @@
-// src/pages/GameDetails.tsx
-import { ArrowLeft,Loader2 } from "lucide-react";
-import { useNavigate,useParams } from "react-router-dom";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import GameRating from "@/components/gameRating";
 import { Button } from "@/components/ui/button";
@@ -12,7 +11,7 @@ export default function GameDetails() {
   const [updateRate] = useUpdateGameMutation();
 
   const { loading, error, data } = useGetGameDetailsQuery({
-    variables: {id: id || ''},
+    variables: { id: id || "" },
   });
 
   if (error || !id) {
