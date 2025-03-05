@@ -1,3 +1,4 @@
+import GameRating from "@/components/gameRating";
 import {
   Card,
   CardContent,
@@ -6,9 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import GameRating from "@/components/gameRating";
-import { Button } from "./ui/button";
 import { Game } from "@/graphql/types";
+
+import { Button } from "./ui/button";
 
 export default function GameCard({
   game,

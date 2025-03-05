@@ -1,10 +1,12 @@
 import "@/App.css";
-import Header from "@/components/header";
-import { Route, Routes } from "react-router-dom";
 
 import { lazy, Suspense } from "react";
+import { Route, Routes } from "react-router-dom";
+
 import Footer from "@/components/footer";
+import Header from "@/components/header";
 import PrivateRoute from "@/pages/privateRoute";
+
 import SharedGames from "./pages/sharedGames";
 
 const Games = lazy(() => import("@/pages/gameCollection"));

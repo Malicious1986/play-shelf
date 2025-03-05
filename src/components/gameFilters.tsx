@@ -1,5 +1,9 @@
 // components/GameFilters.tsx
 
+import { FilterX } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -7,12 +11,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
 import { boardGameCategories } from "@/models/game";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store/store";
 import { setFilters } from "@/store/slices/filtersSlice";
-import { FilterX } from "lucide-react";
+import { RootState } from "@/store/store";
 
 
 export default function GameFilters() {

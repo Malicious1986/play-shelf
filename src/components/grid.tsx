@@ -1,18 +1,19 @@
-import GameCard from "@/components/game";
 import { Loader2 } from "lucide-react";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import NoGames from "@/components/noGames";
-import { useInView } from "react-intersection-observer";
 import { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import EditGameDialog from "@/components/editGameDialog";
+import GameCard from "@/components/game";
+import NoGames from "@/components/noGames";
 import {
   Game,
   useDeleteGameMutation,
   useGetGamesQuery,
   useUpdateGameMutation,
 } from "@/graphql/types";
-import { useNavigate } from "react-router-dom";
-import EditGameDialog from "@/components/editGameDialog";
+import { RootState } from "@/store/store";
 
 const LIMIT = 8;
 

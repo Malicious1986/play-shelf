@@ -1,7 +1,10 @@
-import { Button } from "@/components/ui/button";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import ImageCropper from "@/components/imageCrop/imageCropper";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -10,6 +13,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import {
+  Game,
+  useUpdateGameMutation,
+  useUploadImageMutation,
+} from "@/graphql/types";
+import { boardGameCategories } from "@/models/game";
 
 import {
   Form,
@@ -26,10 +35,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { boardGameCategories } from "@/models/game";
-import { useState, useRef } from "react";
-import ImageCropper from "@/components/imageCrop/imageCropper";
-import { Game, useUpdateGameMutation, useUploadImageMutation } from "@/graphql/types";
 
 interface EditGameDialogProps {
   game: Game | null;
@@ -37,9 +42,12 @@ interface EditGameDialogProps {
   onClose: () => void;
 }
 
-export default function EditGameDialog({ game, open, onClose }: EditGameDialogProps) {
-  if(!game) return null;
-  const [imageUrl, setImageUrl] = useState<string>(game.image || "");
+export default function EditGameDialog({
+  game,
+  open,
+  onClose,
+}: EditGameDialogProps) {
+  const [imageUrl, setImageUrl] = useState<string>(game?.image || "");
   const [cropperOpen, setCropperOpen] = useState<boolean>(false);
   const [rawImage, setRawImage] = useState<string | null>(null);
 
@@ -59,13 +67,15 @@ export default function EditGameDialog({ game, open, onClose }: EditGameDialogPr
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: game.name,
-      description: game.description || '',
-      image: game.image || '',
-      category: game.category || '',
-      rating: game.rating || 0,
+      name: game?.name,
+      description: game?.description || "",
+      image: game?.image || "",
+      category: game?.category || "",
+      rating: game?.rating || 0,
     },
   });
+
+  if (!game) return null;
 
   // ✅ Handle form submission for updating game
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -109,7 +119,7 @@ export default function EditGameDialog({ game, open, onClose }: EditGameDialogPr
       });
 
       const { data } = await uploadImage({ variables: { file } });
-      setImageUrl(data?.uploadImage.url || '');
+      setImageUrl(data?.uploadImage.url || "");
     } catch (err) {
       console.error("Image upload failed:", err);
     }
@@ -194,7 +204,7 @@ export default function EditGameDialog({ game, open, onClose }: EditGameDialogPr
                     <FormLabel>Category:</FormLabel>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={game.category || 'All'}
+                      defaultValue={game.category || "All"}
                     >
                       <FormControl>
                         <SelectTrigger>

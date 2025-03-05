@@ -1,8 +1,9 @@
 // src/pages/GameDetails.tsx
-import { useParams, useNavigate } from "react-router-dom";
-import { Loader2, ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowLeft,Loader2 } from "lucide-react";
+import { useNavigate,useParams } from "react-router-dom";
+
 import GameRating from "@/components/gameRating";
+import { Button } from "@/components/ui/button";
 import { useGetGameDetailsQuery, useUpdateGameMutation } from "@/graphql/types";
 
 export default function GameDetails() {
@@ -10,17 +11,17 @@ export default function GameDetails() {
   const navigate = useNavigate();
   const [updateRate] = useUpdateGameMutation();
 
-  if (!id) {
+  const { loading, error, data } = useGetGameDetailsQuery({
+    variables: {id: id || ''},
+  });
+
+  if (error || !id) {
     return (
       <div className="h-screen w-full flex flex-col items-center justify-center">
         <p className="text-red-500">Invalid game ID. Please try again.</p>
       </div>
     );
   }
-
-  const { loading, error, data } = useGetGameDetailsQuery({
-    variables: {id: id || ''},
-  });
 
   if (loading) {
     return (
@@ -41,7 +42,7 @@ export default function GameDetails() {
     );
   }
 
-  const { name, description, image, category, rating } = data?.game;
+  const { name, description, image, category, rating } = data.game;
   const handleRate = async (newRating: number) => {
     await updateRate({
       variables: { updateGameInput: { id, rating: newRating } },

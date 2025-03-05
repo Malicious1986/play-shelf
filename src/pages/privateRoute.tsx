@@ -1,5 +1,6 @@
-import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+
 import { RootState } from "@/store/store";
 
 export default function PrivateRoute() {

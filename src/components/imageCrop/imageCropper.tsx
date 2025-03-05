@@ -1,8 +1,10 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback,useState } from "react";
 import Cropper from "react-easy-crop";
+
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Slider } from "@/components/ui/slider";
+
 import getCroppedImg from "./cropImage";
 
 interface ImageCropperProps {
@@ -43,7 +45,7 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ imageSrc, open, onClose, on
             image={imageSrc}
             crop={crop}
             zoom={zoom}
-            aspect={1} // ✅ Square aspect ratio
+            aspect={1}
             onCropChange={onCropChange}
             onZoomChange={onZoomChange}
             onCropComplete={onCropCompleteHandler}

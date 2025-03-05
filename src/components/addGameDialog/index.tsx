@@ -1,7 +1,11 @@
-import { Button } from "@/components/ui/button";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Plus } from "lucide-react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import ImageCropper from "@/components/imageCrop/imageCropper";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -12,15 +16,14 @@ import {
 } from "@/components/ui/dialog";
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-  DrawerClose,
 } from "@/components/ui/drawer";
-import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -29,6 +32,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -36,17 +40,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { boardGameCategories } from "@/models/game";
-import { useRef, useState } from "react";
-import ImageCropper from "@/components/imageCrop/imageCropper";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { Plus } from "lucide-react";
 import {
   Game,
   GetGamesDocument,
   useAddGameMutation,
   useUploadImageMutation,
 } from "@/graphql/types";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { boardGameCategories } from "@/models/game";
 
 export default function AddGameDialog() {
   const [open, setOpen] = useState(false);
@@ -93,9 +94,8 @@ export default function AddGameDialog() {
       rating: 0,
     };
 
-    const data = await addGame({ variables: { addGameInput: newGame } });
-    if (!data.errors?.length && data.data?.addGame?.game) {
-    }
+    await addGame({ variables: { addGameInput: newGame } });
+
     form.reset();
     setImageUrl(null);
     setOpen(false);

@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
+import { Link } from "react-router-dom";
+
+import { Button } from "@/components/ui/button";
 
 export default function PageNotFound() {
   return (

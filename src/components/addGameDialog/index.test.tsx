@@ -1,15 +1,18 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { Provider } from "react-redux";
-import { MockedProvider } from "@apollo/client/testing";
-import { describe, it, expect, vi } from "vitest";
-import AddGameDialog from "./index";
 import "@testing-library/jest-dom";
-import { store } from "@/store/store";
+
+import { MockedProvider } from "@apollo/client/testing";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { Provider } from "react-redux";
+import { describe, expect, it, vi } from "vitest";
+
 import {
   AddGameDocument,
   GetGamesDocument,
   UploadImageDocument,
 } from "@/graphql/types";
+import { store } from "@/store/store";
+
+import AddGameDialog from "./index";
 vi.mock("@/hooks/useMediaQuery", () => ({
   useMediaQuery: () => true,
 }));

@@ -1,8 +1,9 @@
-import GameGrid from "@/components/grid";
+import { Link } from "lucide-react";
+
 import AddGameDialog from "@/components/addGameDialog";
 import GameFilters from "@/components/gameFilters";
+import GameGrid from "@/components/grid";
 import { Button } from "@/components/ui/button";
-import { Link } from "lucide-react";
 import { useGenerateShareLinkMutation } from "@/graphql/types";
 
 export default function GameCollection() {

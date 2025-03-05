@@ -1,13 +1,16 @@
+import "./index.css";
+
+import { ApolloProvider } from "@apollo/client";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
-import App from "./App.tsx";
-import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
-import { store } from "@/store/store.ts";
-import { ApolloProvider } from "@apollo/client";
+import { BrowserRouter } from "react-router-dom";
+
 import client from "@/apolloClient";
 import { ThemeProvider } from "@/components/theme-provider";
+import { store } from "@/store/store.ts";
+
+import App from "./App.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
