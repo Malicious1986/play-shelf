@@ -1,18 +1,14 @@
-import { useQuery } from "@apollo/client";
-import { GET_SHARED_GAMES } from "@/graphql/queries";
 import { useParams } from "react-router-dom";
-import { Game } from "@/models/game";
 import GameCard from "@/components/game";
 import NoGames from "@/components/noGames";
+import { Game, useSharedGamesQuery } from "@/graphql/types";
 
 export default function SharedGames() {
   const { shareId } = useParams<{ shareId: string }>();
-  const { loading, data } = useQuery<{ sharedGames: {games: Game[], username: String }}>(
-    GET_SHARED_GAMES,
-    {
-      variables: { shareId },
-    }
-  );
+  if (!shareId) return <p>Invalid share link</p>;
+  const { loading, data } = useSharedGamesQuery({
+    variables: { shareId },
+  });
 
   if (loading) return <p>Loading shared games...</p>;
 
@@ -31,11 +27,13 @@ export default function SharedGames() {
             : ""
         } `}
       >
-        {data?.sharedGames.games?.length
-          ? data.sharedGames.games.map((game: Game, index: number) => (
-              <GameCard key={index} {...game} />
-            ))
-          : <NoGames />}
+        {data?.sharedGames.games?.length ? (
+          data.sharedGames.games.map((game: Game, index: number) => (
+            <GameCard key={index} game={game} />
+          ))
+        ) : (
+          <NoGames />
+        )}
       </div>
     </div>
   );

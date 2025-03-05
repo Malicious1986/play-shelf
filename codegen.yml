@@ -1,8 +1,13 @@
-schema: "https://your-railway-app.up.railway.app/graphql"
-documents: "src/**/*.ts"
-generates:
-  src/graphql/generated.ts:
-    plugins:
-      - "typescript"
-      - "typescript-operations"
-      - "typescript-react-apollo"
+schema: "http://localhost:5050/graphql" # Replace with your backend GraphQL endpoint
+documents: "src/graphql/**/*.graphql"   # Path to GraphQL queries/mutations
+# generates:
+#   src/graphql/types.ts:                 # Output file where TypeScript types will be saved
+#     plugins:
+#       - "typescript"                     # Generates base TypeScript types
+#       - "typescript-operations"          # Generates types for queries/mutations
+#       - "typescript-react-apollo"        # Generates Apollo Client hooks
+#     config:
+#       withHooks: true
+#       withComponent: false
+#       withHOC: false
+#       withMutationFn: true

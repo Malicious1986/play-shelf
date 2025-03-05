@@ -1,20 +1,21 @@
 import GameGrid from "@/components/grid";
-import { AddGameDialog } from "@/components/addGameDialog";
+import AddGameDialog from "@/components/addGameDialog";
 import GameFilters from "@/components/gameFilters";
-import { useMutation } from "@apollo/client";
-import { GENERATE_SHARE_LINK } from "@/graphql/mutations";
 import { Button } from "@/components/ui/button";
 import { Link } from "lucide-react";
+import { useGenerateShareLinkMutation } from "@/graphql/types";
 
 export default function GameCollection() {
-  const [generateShareLink] = useMutation(GENERATE_SHARE_LINK);
-  
+  const [generateShareLink] = useGenerateShareLinkMutation();
+
   const handleShare = async () => {
     try {
-      const { data } = await generateShareLink();
-      const shareUrl = data.generateShareLink;
+      const data = await generateShareLink();
+      const shareUrl = data.data?.generateShareLink.shareLink;
+      if (shareUrl) {
+        await navigator.clipboard.writeText(shareUrl);
+      }
 
-      await navigator.clipboard.writeText(shareUrl);
       alert("Link copied! Share with your friends.");
     } catch (error) {
       console.error("Failed to generate share link:", error);

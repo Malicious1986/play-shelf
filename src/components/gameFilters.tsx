@@ -31,7 +31,6 @@ export default function GameFilters() {
 
   return (
     <div className="flex gap-4">
-      {/* ✅ Category Filter */}
       <Select
         value={filters.category as string}
         onValueChange={(value) => handleFilterChange("category", value)}
@@ -48,7 +47,6 @@ export default function GameFilters() {
         </SelectContent>
       </Select>
 
-      {/* ✅ Reset Button */}
       <Button variant="outline" onClick={handleReset}>
         <FilterX/> <span className="md:inline hidden">Reset Filters</span>
       </Button>

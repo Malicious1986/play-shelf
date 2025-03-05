@@ -4,8 +4,8 @@ import { Star } from "lucide-react";
 interface GameRatingProps {
   rating: number;
   onRate: (newRating: number) => void;
-  size?: number; // Optional: For flexible star sizes
-  readOnly?: boolean; // Optional: For display-only stars
+  size?: number;
+  readOnly?: boolean;
 }
 
 export default function GameRating({

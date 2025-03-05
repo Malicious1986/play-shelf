@@ -60,7 +60,30 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
 
 const client = new ApolloClient({
   link: errorLink.concat(authLink.concat(uploadLink)),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          games: {
+            // Disables automatic keying by arguments (like page numbers or cursors)
+            keyArgs: (args)  => {
+              if(args?.category === 'All') {
+                return false
+              }
+              return ['category'];
+            },
+            // The merge function defines how to combine incoming paginated results with the existing cache
+              merge(existing = { games: [], hasMore: true }, incoming) {
+              return {
+                games: [...existing.games, ...incoming.games],
+                hasMore: incoming.hasMore,
+              };
+            },
+          },
+        },
+      },
+    },
+  }),
 });
 
 export default client;

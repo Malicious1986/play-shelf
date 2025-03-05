@@ -1,0 +1,13 @@
+query SharedGames($shareId: ID!) {
+  sharedGames(shareId: $shareId) {
+    username
+    games {
+      id
+      name
+      description
+      image
+      category
+      rating
+    }
+  }
+}

@@ -1,0 +1,5 @@
+fragment baseResponseFragment on MutationResponse {
+  success
+  message
+  error
+}

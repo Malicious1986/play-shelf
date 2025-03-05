@@ -1,3 +1,5 @@
+
+
 import { Dices } from "lucide-react";
 
 export default function NoGames() {

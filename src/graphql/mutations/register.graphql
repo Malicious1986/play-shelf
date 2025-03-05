@@ -1,0 +1,13 @@
+mutation Register($name: String!, $email: String!, $password: String!) {
+  register(name: $name, email: $email, password: $password) {
+    ...baseResponseFragment
+    auth {
+      token
+      user {
+        id
+        name
+        email
+      }
+    }
+  }
+}

@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { useMutation } from "@apollo/client";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -27,27 +26,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { boardGameCategories, Game } from "@/models/game";
+import { boardGameCategories } from "@/models/game";
 import { useState, useRef } from "react";
-import { UPDATE_GAME, UPLOAD_IMAGE } from "@/graphql/mutations";
 import ImageCropper from "@/components/imageCrop/imageCropper";
-import { GET_GAMES } from "@/graphql/queries";
+import { Game, useUpdateGameMutation, useUploadImageMutation } from "@/graphql/types";
 
 interface EditGameDialogProps {
-  game: Game; // Existing game data
+  game: Game | null;
   open: boolean;
   onClose: () => void;
 }
 
-export function EditGameDialog({ game, open, onClose }: EditGameDialogProps) {
-  const [imageUrl, setImageUrl] = useState<string>(game.image);
+export default function EditGameDialog({ game, open, onClose }: EditGameDialogProps) {
+  if(!game) return null;
+  const [imageUrl, setImageUrl] = useState<string>(game.image || "");
   const [cropperOpen, setCropperOpen] = useState<boolean>(false);
   const [rawImage, setRawImage] = useState<string | null>(null);
 
-  const [uploadImage, { loading: uploading }] = useMutation(UPLOAD_IMAGE);
-  const [updateGame] = useMutation(UPDATE_GAME, {
-    refetchQueries: [{ query: GET_GAMES }],
-  });
+  const [uploadImage, { loading: uploading }] = useUploadImageMutation();
+  const [updateGame] = useUpdateGameMutation();
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -63,10 +60,10 @@ export function EditGameDialog({ game, open, onClose }: EditGameDialogProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: game.name,
-      description: game.description,
-      image: game.image,
-      category: game.category,
-      rating: game.rating,
+      description: game.description || '',
+      image: game.image || '',
+      category: game.category || '',
+      rating: game.rating || 0,
     },
   });
 
@@ -88,7 +85,6 @@ export function EditGameDialog({ game, open, onClose }: EditGameDialogProps) {
     onClose();
   };
 
-  // ✅ Handle file selection for cropping
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -113,7 +109,7 @@ export function EditGameDialog({ game, open, onClose }: EditGameDialogProps) {
       });
 
       const { data } = await uploadImage({ variables: { file } });
-      setImageUrl(data.uploadImage); // ✅ Save uploaded image URL
+      setImageUrl(data?.uploadImage.url || '');
     } catch (err) {
       console.error("Image upload failed:", err);
     }
@@ -198,7 +194,7 @@ export function EditGameDialog({ game, open, onClose }: EditGameDialogProps) {
                     <FormLabel>Category:</FormLabel>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={game.category}
+                      defaultValue={game.category || 'All'}
                     >
                       <FormControl>
                         <SelectTrigger>

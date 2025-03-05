@@ -1,5 +1,3 @@
-import { Game } from "@/models/game";
-import { useMutation } from "@apollo/client";
 import {
   Card,
   CardContent,
@@ -10,49 +8,63 @@ import {
 } from "@/components/ui/card";
 import GameRating from "@/components/gameRating";
 import { Button } from "./ui/button";
-import { DELETE_GAME, UPDATE_GAME_RATE } from "@/graphql/mutations";
-import { GET_GAMES } from "@/graphql/queries";
-import { useState } from "react";
-import { EditGameDialog } from "./editGameDialog";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import { useNavigate } from "react-router-dom";
+import { Game } from "@/graphql/types";
 
 export default function GameCard({
-  name,
-  description,
-  image,
-  rating,
-  id,
-  category,
-}: Game) {
-  const [editOpen, setEditOpen] = useState(false);
-  const filters = useSelector((state: RootState) => state.filters.filters);
-  const navigate = useNavigate();
-
-  const [updateRate] = useMutation(UPDATE_GAME_RATE, {
-    refetchQueries: [{ query: GET_GAMES, variables: filters }],
-  });
-
-  const [deleteGame] = useMutation(DELETE_GAME, {
-    refetchQueries: [{ query: GET_GAMES, variables: filters }],
-  });
+  game,
+  isShared,
+  onEdit,
+  onUpdateRate,
+  onDelete,
+  onCardClick,
+}: {
+  game: Game;
+  isShared?: boolean;
+  onEdit?: (game: Game) => void;
+  onUpdateRate?: ({ id, rate }: { id: string; rate: number }) => void;
+  onDelete?: (id: string) => void;
+  onCardClick?: (id: string) => void;
+}) {
+  const { id, name, description, image, rating } = game;
 
   const setRateValue = async (newRating: number) => {
-    await updateRate({ variables: { updateGameInput: { id, rating: newRating } } });
-  };
-
-  const handleRemove = async () => {
-    await deleteGame({ variables: { id } });
+    if (typeof onUpdateRate == "function") {
+      await onUpdateRate({ id, rate: newRating });
+    }
   };
 
   const handleCardClick = () => {
-    navigate(`/games/${id}`);
+    if (typeof onCardClick == "function") {
+      onCardClick(id);
+    }
+  };
+
+  const onDeleteHandler = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    id: string
+  ) => {
+    e.stopPropagation();
+    if (typeof onDelete == "function") {
+      await onDelete(id);
+    }
+  };
+
+  const onEditHandler = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    game: Game
+  ) => {
+    e.stopPropagation();
+    if (typeof onEdit == "function") {
+      onEdit(game);
+    }
   };
 
   return (
     <>
-      <Card className="flex flex-col hover:shadow-lg cursor-pointer" onClick={handleCardClick}>
+      <Card
+        className="flex flex-col hover:shadow-lg cursor-pointer"
+        onClick={handleCardClick}
+      >
         <CardHeader>
           <CardTitle className="truncate">{name}</CardTitle>
           <CardDescription className="h-10 line-clamp-2">
@@ -62,7 +74,7 @@ export default function GameCard({
 
         <CardContent className="flex-1 flex justify-center items-center">
           <img
-            src={image}
+            src={image || "./images/fallback.jpg"}
             height={304}
             width={304}
             alt={name}
@@ -71,41 +83,33 @@ export default function GameCard({
         </CardContent>
 
         <CardFooter className="flex flex-col justify-between items-start gap-3 w-full">
-          <GameRating rating={rating} onRate={setRateValue} />
+          <GameRating rating={rating || 0} onRate={setRateValue} />
 
-          <div className="flex gap-2 w-full">
-            <Button
-              className="flex-1"
-              variant="secondary"
-              onClick={(e) => {
-                e.stopPropagation();
-                setEditOpen(true);
-              }}
-            >
-              Edit
-            </Button>
+          {!isShared ? (
+            <div className="flex gap-2 w-full">
+              <Button
+                className="flex-1"
+                variant="secondary"
+                onClick={(e) => {
+                  onEditHandler(e, game);
+                }}
+              >
+                Edit
+              </Button>
 
-            <Button
-              className="flex-1"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleRemove();
-              }}
-              variant="destructive"
-            >
-              Remove
-            </Button>
-          </div>
+              <Button
+                className="flex-1"
+                onClick={(e) => {
+                  onDeleteHandler(e, id);
+                }}
+                variant="destructive"
+              >
+                Remove
+              </Button>
+            </div>
+          ) : null}
         </CardFooter>
       </Card>
-
-      {editOpen && (
-        <EditGameDialog
-          game={{ id, name, description, image, rating, category }}
-          open={editOpen}
-          onClose={() => setEditOpen(false)}
-        />
-      )}
     </>
   );
 }
