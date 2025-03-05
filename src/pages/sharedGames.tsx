@@ -5,10 +5,10 @@ import NoGames from "@/components/noGames";
 import { Game, useSharedGamesQuery } from "@/graphql/types";
 
 export default function SharedGames() {
-  const { shareId } = useParams<{ shareId: string }>();
+  const { shareId } = useParams<{ shareId: string }>() s;
 
   const { loading, data, error } = useSharedGamesQuery({
-    variables: { shareId: shareId || '' },
+    variables: { shareId: shareId || "" },
   });
 
   if (loading) return <p>Loading shared games...</p>;
