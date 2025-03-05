@@ -8,7 +8,7 @@ export default function SharedGames() {
   const { shareId } = useParams<{ shareId: string }>();
 
   const { loading, data, error } = useSharedGamesQuery({
-    variables: { shareId: shareId || '' },
+    variables: { shareId: shareId || "" },
   });
 
   if (loading) return <p>Loading shared games...</p>;
